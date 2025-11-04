@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Electric Vehicle Fleet Analysis: Mathematical Framework & Insights</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0A0F10 0%, #172226 50%, #0A0F10 100%);
+            color: #B2E4D9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #172226 0%, #2A3A3E 100%);
+            border-bottom: 3px solid #597C82;
+            margin-bottom: 60px;
+            box-shadow: 0 4px 20px rgba(91, 124, 130, 0.3);
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #B2E4D9;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: #597C82;
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        h2 {
+            font-size: 2.2em;
+            color: #B2E4D9;
+            margin: 50px 0 30px 0;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #476F75;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        h3 {
+            font-size: 1.6em;
+            color: #597C82;
+            margin: 40px 0 20px 0;
+            font-weight: 600;
+        }
+
+        .section {
+            background: rgba(23, 34, 38, 0.6);
+            padding: 40px;
+            margin: 30px 0;
+            border-radius: 8px;
+            border-left: 4px solid #597C82;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .section:hover {
+            border-left-color: #B2E4D9;
+            transition: border-left-color 0.3s ease;
+        }
+
+        p {
+            margin: 20px 0;
+            font-size: 1.1em;
+            color: #B2E4D9;
+        }
+
+        .math-block {
+            background: linear-gradient(135deg, #2A3A3E 0%, #172226 100%);
+            padding: 30px;
+            margin: 25px 0;
+            border-radius: 6px;
+            border: 1px solid #476F75;
+            font-family: 'Courier New', monospace;
+            color: #B2E4D9;
+        }
+
+        .formula {
+            text-align: center;
+            font-size: 1.2em;
+            margin: 15px 0;
+            color: #597C82;
+            font-weight: 600;
+        }
+
+        .insight-box {
+            background: linear-gradient(135deg, #5F5CA4 0%, #476F75 100%);
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+            border-left: 5px solid #B2E4D9;
+            box-shadow: 0 4px 15px rgba(95, 92, 164, 0.4);
+        }
+
+        .insight-box p {
+            color: #B2E4D9;
+            font-weight: 500;
+        }
+
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .technique-card {
+            background: linear-gradient(135deg, #172226 0%, #2A3A3E 100%);
+            padding: 30px;
+            border-radius: 8px;
+            border: 2px solid #476F75;
+            transition: all 0.3s ease;
+        }
+
+        .technique-card:hover {
+            transform: translateY(-5px);
+            border-color: #B2E4D9;
+            box-shadow: 0 8px 25px rgba(178, 228, 217, 0.2);
+        }
+
+        .technique-card h4 {
+            color: #B2E4D9;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .technique-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .technique-card li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            color: #597C82;
+        }
+
+        .technique-card li:before {
+            content: "▹";
+            position: absolute;
+            left: 0;
+            color: #B2E4D9;
+            font-weight: bold;
+        }
+
+        .viz-section {
+            background: rgba(95, 92, 164, 0.1);
+            padding: 35px;
+            margin: 30px 0;
+            border-radius: 8px;
+            border: 2px solid #5F5CA4;
+        }
+
+        .viz-section h4 {
+            color: #B2E4D9;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .algorithm-steps {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 20px;
+        }
+
+        .algorithm-steps li {
+            counter-increment: step-counter;
+            padding: 15px 15px 15px 50px;
+            margin: 15px 0;
+            background: rgba(23, 34, 38, 0.8);
+            border-radius: 6px;
+            border-left: 3px solid #597C82;
+            position: relative;
+            color: #B2E4D9;
+        }
+
+        .algorithm-steps li:before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #5F5CA4;
+            color: #B2E4D9;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .highlight {
+            color: #B2E4D9;
+            font-weight: 600;
+            background: linear-gradient(135deg, rgba(89, 124, 130, 0.2) 0%, rgba(178, 228, 217, 0.2) 100%);
+            padding: 2px 8px;
+            border-radius: 3px;
+        }
+
+        .key-concept {
+            background: linear-gradient(90deg, rgba(95, 92, 164, 0.3) 0%, rgba(71, 111, 117, 0.3) 100%);
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #5F5CA4;
+            border-radius: 4px;
+        }
+
+        .key-concept strong {
+            color: #B2E4D9;
+            font-size: 1.1em;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 80px;
+            border-top: 2px solid #476F75;
+            color: #597C82;
+            font-size: 0.95em;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .metric-box {
+            background: linear-gradient(135deg, #2A3A3E 0%, #172226 100%);
+            padding: 25px;
+            border-radius: 8px;
+            border: 2px solid #476F75;
+            text-align: center;
+        }
+
+        .metric-label {
+            color: #597C82;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .metric-value {
+            color: #B2E4D9;
+            font-size: 2em;
+            font-weight: 700;
+        }
+
+        code {
+            background: rgba(23, 34, 38, 0.8);
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #B2E4D9;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Advanced Electric Vehicle Fleet Analysis</h1>
+        <p class="subtitle">Mathematical Framework & Analytical Methodology</p>
+    </header>
+
+    <div class="container">
+        <div class="section">
+            <h2>Executive Overview</h2>
+            <p>This analysis examines over 264,000 electric vehicle registrations through a dual-framework approach combining classical statistical methods with novel dimensionality reduction techniques. The dataset spans multiple temporal epochs from pioneering adoption phases through current hypergrowth, encompassing geographic distribution patterns, manufacturer market dynamics, and technology adoption trajectories.</p>
+            
+            <div class="metric-grid">
+                <div class="metric-box">
+                    <div class="metric-label">Total Records</div>
+                    <div class="metric-value">264,628</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Analysis Frameworks</div>
+                    <div class="metric-value">2</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Visualization Suites</div>
+                    <div class="metric-value">12</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-label">Analytical Dimensions</div>
+                    <div class="metric-value">17+</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Novel Data Organization: TemporalSpatialIndex</h2>
+            
+            <p>The cornerstone of this analysis is a composite indexing system that transforms raw registration data into a multidimensional scoring framework. Rather than analyzing temporal, spatial, and market factors independently, the TemporalSpatialIndex synthesizes these dimensions into a unified metric.</p>
+
+            <div class="math-block">
+                <h3>Construction Algorithm</h3>
+                <div class="formula">TSI = (0.4 × Temporal Weight) + (0.3 × Spatial Entropy) + (0.3 × Market Density)</div>
+                
+                <p style="margin-top: 20px;">Where:</p>
+                <ul class="algorithm-steps">
+                    <li><span class="highlight">Temporal Weight</span> normalizes model year to a 0-1 scale, capturing fleet age and adoption maturity</li>
+                    <li><span class="highlight">Spatial Entropy</span> encodes geographic distribution through county-level factorization, measuring concentration patterns</li>
+                    <li><span class="highlight">Market Density</span> quantifies manufacturer presence through numerical encoding, revealing competitive positioning</li>
+                </ul>
+            </div>
+
+            <div class="key-concept">
+                <strong>Why This Matters:</strong> Traditional analysis treats time, space, and market share as separate variables. By combining them into a composite score, we can identify vehicles that occupy unique positions in this three-dimensional landscape. A high TSI score might indicate a recent model, in a concentrated geographic market, from a dominant manufacturer. A low score suggests the opposite: older vehicles, dispersed geographically, from niche manufacturers.
+            </div>
+
+            <h3>Quartile Stratification</h3>
+            <p>The continuous TSI scores are then segmented into four distinct phases:</p>
+            
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>Genesis</h4>
+                    <p>Early adopter vehicles with low TSI scores. These represent the pioneering phase of EV adoption, characterized by limited geographic concentration and diverse manufacturer experimentation.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>Expansion</h4>
+                    <p>Growing market presence with moderate TSI scores. Geographic diffusion begins as EVs move beyond coastal urban centers into secondary markets.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>Maturation</h4>
+                    <p>Established market dynamics with elevated TSI scores. Clear leaders emerge as infrastructure development enables broader adoption patterns.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>Singularity</h4>
+                    <p>Peak concentration with maximum TSI scores. Recent models from dominant manufacturers in highly penetrated markets, representing the current state of mass adoption.</p>
+                </div>
+            </div>
+
+            <h3>Adoption Velocity Calculation</h3>
+            <p>Beyond static positioning, the framework computes temporal derivatives to capture acceleration patterns. For each county-year combination, we calculate the change in registration velocity:</p>
+
+            <div class="math-block">
+                <div class="formula">Velocity Delta = Registrations(year[n]) - Registrations(year[n-1])</div>
+                <p style="margin-top: 20px;">This first-order derivative reveals which geographic regions are experiencing accelerating versus decelerating adoption. Positive deltas indicate growing momentum, while negative values suggest market saturation or competitive displacement.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Dimensional Reduction & Clustering</h2>
+
+            <h3>Principal Component Analysis</h3>
+            <p>High-dimensional data presents visualization challenges. When each vehicle has multiple attributes spanning model year, geographic location, manufacturer, technology type, and regulatory status, standard plotting becomes impossible. PCA addresses this through mathematical transformation.</p>
+
+            <div class="math-block">
+                <h3>The Mathematics of Compression</h3>
+                <p>Imagine a dataset where each vehicle is a point in 10-dimensional space. PCA finds the direction of maximum variance in this space. The first principal component is the line that, when you project all points onto it, preserves the most information about the original data structure. The second component is perpendicular to the first and captures the next most variance.</p>
+                
+                <p style="margin-top: 15px;">Mathematically, this involves eigendecomposition of the covariance matrix. The eigenvectors become our new coordinate system, and the eigenvalues tell us how much variance each direction captures.</p>
+            </div>
+
+            <div class="insight-box">
+                <p><strong>Practical Interpretation:</strong> When we see that PC1 explains 45% of variance and PC2 explains 28%, we know that these two dimensions alone capture 73% of the information present in the original high-dimensional data. Models that cluster together in this reduced space share similar characteristics across multiple attributes simultaneously.</p>
+            </div>
+
+            <h3>K-Means Clustering in Reduced Space</h3>
+            <p>Once we have compressed the data into two dimensions, we can apply clustering algorithms to identify natural groupings. K-means works through iterative refinement:</p>
+
+            <ol class="algorithm-steps">
+                <li>Initialize five random cluster centers in the 2D PCA space</li>
+                <li>Assign each vehicle model to its nearest cluster center using Euclidean distance</li>
+                <li>Recalculate cluster centers as the mean position of all assigned points</li>
+                <li>Repeat steps 2-3 until center positions stabilize</li>
+                <li>Final clusters represent distinct market segments with similar profiles</li>
+            </ol>
+
+            <div class="key-concept">
+                <strong>Cluster Interpretation:</strong> The resulting clusters might represent categories like "luxury long-range BEVs from established manufacturers," "affordable PHEVs with moderate range," or "early-market compliance vehicles." The algorithm discovers these patterns without being explicitly told to look for them.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Hierarchical Manufacturer Taxonomy</h2>
+
+            <p>While K-means identifies flat clusters, hierarchical clustering builds a tree structure showing relationships at multiple scales. This is particularly valuable for understanding manufacturer positioning.</p>
+
+            <h3>Linkage Methods & Distance Metrics</h3>
+            <p>The algorithm starts by treating each manufacturer as its own cluster, then iteratively merges the two closest clusters until only one remains. The key question is: how do we measure "closest"?</p>
+
+            <div class="math-block">
+                <h3>Ward's Linkage Criterion</h3>
+                <p>Ward's method merges clusters to minimize the increase in total within-cluster variance. At each step, it considers all possible merges and chooses the one that increases overall variance by the smallest amount. This tends to create compact, spherical clusters.</p>
+                
+                <div class="formula">Merge Cost = Σ(distance from points to new centroid)² - Σ(distances to old centroids)²</div>
+            </div>
+
+            <div class="insight-box">
+                <p><strong>Reading the Dendrogram:</strong> The tree structure reveals hierarchical relationships. Manufacturers that merge at low heights are very similar in their temporal adoption patterns, average model year, BEV versus PHEV focus, and market penetration. Those merging at high heights are fundamentally different in their strategic positioning.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Correlation Network Analysis</h2>
+
+            <p>Beyond clustering, we construct correlation matrices to understand synchronized behavior patterns. When two manufacturers show high temporal correlation, it suggests they are responding to similar market forces, regulatory environments, or technological constraints.</p>
+
+            <h3>Correlation Computation</h3>
+            <div class="math-block">
+                <p>For manufacturers A and B across years, correlation measures how synchronized their registration patterns are:</p>
+                
+                <div class="formula">r = Σ[(A[i] - mean(A)) × (B[i] - mean(B))] / √[Σ(A[i] - mean(A))² × Σ(B[i] - mean(B))²]</div>
+                
+                <p style="margin-top: 15px;">Values range from -1 to +1. A correlation near +1 indicates manufacturers growing together. Values near 0 suggest independent trajectories. Negative correlations would indicate competitive displacement, where one manufacturer's gains coincide with another's losses.</p>
+            </div>
+
+            <div class="key-concept">
+                <strong>Network Interpretation:</strong> Strong correlations among Tesla, Nissan, and Chevrolet in early years reflect the pioneering phase where all manufacturers benefited from expanding infrastructure and policy support. Later divergence shows market segmentation as different manufacturers target distinct customer segments.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Phase Space Trajectory Analysis</h2>
+
+            <p>Traditional time series plots show how variables change over time. Phase space trajectories reveal relationships between variables, with time as an implicit parameter shown through color or annotation.</p>
+
+            <h3>Constructing the Phase Space</h3>
+            <p>We plot total registrations on the x-axis against BEV penetration ratio on the y-axis. Each point represents a single year, connected by lines to show progression. This transforms the question from "how are things changing over time?" to "what is the relationship between market size and technology adoption?"</p>
+
+            <div class="insight-box">
+                <p><strong>Trajectory Patterns:</strong> A trajectory moving right and upward indicates simultaneous growth in market size and BEV preference. Horizontal movement suggests market expansion without technology shift. Vertical movement indicates technology transition without volume growth. Loops or reversals suggest complex dynamics like temporary setbacks or strategic pivots.</p>
+            </div>
+
+            <h3>LineCollection for Temporal Gradient</h3>
+            <p>The visualization uses a color gradient along the trajectory to show temporal progression. Early years appear in darker tones, transitioning to brighter colors for recent data. This allows viewers to simultaneously perceive the path shape and temporal sequence without cluttering the plot with year labels.</p>
+        </div>
+
+        <div class="section">
+            <h2>Violin Plot Distributions</h2>
+
+            <p>Standard box plots show quartiles and outliers but hide distribution shape. Violin plots combine box plot information with kernel density estimation to reveal the full probability distribution.</p>
+
+            <div class="math-block">
+                <h3>Kernel Density Estimation</h3>
+                <p>For each manufacturer's model year distribution, we estimate the underlying probability density function. At each point along the year axis, we place a small Gaussian "kernel" centered on that value. The sum of all these kernels creates a smooth density estimate.</p>
+                
+                <p style="margin-top: 15px;">Mathematically, for data points x₁, x₂, ..., xₙ:</p>
+                <div class="formula">Density(y) = (1/n) × Σ K[(y - xᵢ)/h]</div>
+                <p style="margin-top: 10px;">where K is the kernel function and h is the bandwidth parameter controlling smoothness.</p>
+            </div>
+
+            <div class="key-concept">
+                <strong>Distribution Insights:</strong> Wide violins indicate manufacturers with diverse model year portfolios, mixing old and new vehicles. Narrow violins suggest focused product cycles. Bimodal distributions reveal distinct product generations or strategic shifts in positioning.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Geographic Acceleration Index</h2>
+
+            <p>The adoption velocity delta metric quantifies regional momentum. Rather than simply counting registrations per county, we measure how that rate of registration is changing over time.</p>
+
+            <h3>Second-Order Analysis</h3>
+            <div class="math-block">
+                <p>Velocity is the first derivative of position with respect to time. Acceleration is the second derivative. In our context:</p>
+                <ul class="algorithm-steps">
+                    <li>Position = Cumulative registrations in a county</li>
+                    <li>Velocity = New registrations per year (first derivative)</li>
+                    <li>Acceleration = Change in yearly registrations (second derivative)</li>
+                </ul>
+                <p style="margin-top: 20px;">Positive acceleration means not only is the county adding EVs, but it's adding them at an increasing rate. This identifies emerging hotspots before they become obvious in simple registration counts.</p>
+            </div>
+
+            <div class="insight-box">
+                <p><strong>Strategic Implications:</strong> Counties with high positive acceleration are ideal targets for infrastructure investment and dealer network expansion. Negative acceleration suggests market saturation or the need for policy intervention to maintain momentum.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Market Topology Visualization</h2>
+
+            <p>The treemap uses recursive spatial subdivision to show hierarchical market share. Unlike pie charts that allocate circumference, treemaps allocate area, making it easier to compare values and perceive nested structure.</p>
+
+            <h3>Squarified Layout Algorithm</h3>
+            <div class="math-block">
+                <p>The algorithm recursively divides a rectangle to represent hierarchical data. At each step:</p>
+                <ol class="algorithm-steps">
+                    <li>Sort remaining items by size</li>
+                    <li>Decide whether to split horizontally or vertically based on remaining aspect ratio</li>
+                    <li>Partition based on relative sizes to maintain roughly square sub-rectangles</li>
+                    <li>Recursively subdivide each partition</li>
+                </ol>
+                <p style="margin-top: 20px;">The goal is minimizing aspect ratios because squares are easier to compare than elongated rectangles.</p>
+            </div>
+
+            <div class="key-concept">
+                <strong>Visual Encoding:</strong> Area represents market share directly. Color distinguishes categories. Adjacency is meaningful only when items share a parent node. The human visual system excels at comparing areas, making this highly effective for proportion perception.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Flow Network Diagrams</h2>
+
+            <p>The city-manufacturer flow network visualizes relationships between geographic locations and brands. Line width encodes volume, transparency encodes relative importance, and color distinguishes manufacturer pathways.</p>
+
+            <h3>Sankey-Style Visualization</h3>
+            <p>Unlike traditional network graphs with uniform edges, flow networks use variable-width connectors proportional to the quantity flowing between nodes. This makes patterns of dominance immediately visible.</p>
+
+            <div class="insight-box">
+                <p><strong>Pattern Recognition:</strong> Thick flows from major cities to single manufacturers indicate brand loyalty or dealer dominance. Distributed flows suggest competitive markets. Convergent patterns where multiple cities feed one manufacturer reveal national brand strength. Divergent patterns where one city splits among many manufacturers indicate fragmented local markets.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Temporal Decomposition</h2>
+
+            <p>Complex time series often contain multiple components: underlying trend, periodic cycles, and random noise. Decomposition separates these to understand each independently.</p>
+
+            <h3>Moving Average Trend Extraction</h3>
+            <div class="math-block">
+                <p>A simple moving average smooths short-term fluctuations to reveal long-term trends. For a window size of w years:</p>
+                <div class="formula">Trend[t] = (1/w) × Σ Original[t-w/2 : t+w/2]</div>
+                <p style="margin-top: 15px;">Each point in the trend line is the average of surrounding points, giving equal weight to all values in the window. This filters high-frequency noise while preserving overall trajectory.</p>
+            </div>
+
+            <h3>Residual Analysis</h3>
+            <p>After extracting the trend, subtracting it from the original series leaves the residuals. These represent deviations from the expected trend, capturing unexpected events, policy changes, or seasonal effects.</p>
+
+            <div class="key-concept">
+                <strong>Residual Interpretation:</strong> Large positive residuals indicate years of unexpectedly high adoption, potentially driven by incentive programs, product launches, or infrastructure expansion. Negative residuals suggest headwinds like supply constraints, economic downturns, or competitive pressures.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Multidimensional Scatter Matrix</h2>
+
+            <p>When dealing with more than three variables, scatter plots can encode additional dimensions through size, color, and transparency. Each visual channel becomes a variable carrier.</p>
+
+            <h3>Visual Encoding Channels</h3>
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>X-Axis Position</h4>
+                    <p>Primary variable of interest, often representing a key input or independent variable like model year or total volume.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>Y-Axis Position</h4>
+                    <p>Primary response variable, typically an outcome measure like BEV percentage or CAFV eligibility rate.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>Point Size</h4>
+                    <p>Encodes magnitude, often total registrations or market share. Larger points dominate visually, naturally highlighting important observations.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>Point Color</h4>
+                    <p>Represents a continuous variable through color gradient, like TSI score or temporal progression. Color scales must be chosen carefully for perceptual uniformity.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>Transparency</h4>
+                    <p>Can indicate uncertainty, confidence intervals, or simply manage overplotting by allowing users to see through overlapping points.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>Edge Color</h4>
+                    <p>Additional categorical dimension, often used to distinguish groups or highlight outliers with contrasting borders.</p>
+                </div>
+            </div>
+
+            <div class="insight-box">
+                <p><strong>Perceptual Limitations:</strong> While theoretically we can encode six dimensions, human perception struggles beyond four. Position is most accurately perceived, followed by size, then color. Transparency and edge encoding are supplementary and should not carry critical information alone.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Statistical Rigor & Uncertainty</h2>
+
+            <p>All analyses acknowledge inherent uncertainty. Large sample sizes provide statistical power, but various biases may exist in registration data.</p>
+
+            <h3>Potential Biases</h3>
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>Geographic Bias</h4>
+                    <p>Dataset heavily weighted toward Washington state. Conclusions about national trends must be drawn carefully, as Washington has unique policy environments and demographics.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>Temporal Bias</h4>
+                    <p>Recent years over-represented due to growing market. Historical patterns based on small samples may be less reliable than recent data.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>Survival Bias</h4>
+                    <p>Registration data only captures vehicles currently registered. Early EVs that were retired, exported, or destroyed are invisible, potentially inflating early adoption metrics.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>Reporting Lag</h4>
+                    <p>Most recent data may be incomplete as registrations continue to be processed. Final months may show artificial downturns before being corrected.</p>
+                </div>
+            </div>
+
+            <h3>Validation Approaches</h3>
+            <p>Robust analysis employs multiple complementary techniques. When PCA, hierarchical clustering, and correlation networks all identify similar manufacturer groupings, confidence increases. Contradictory signals from different methods warrant deeper investigation.</p>
+        </div>
+
+        <div class="section">
+            <h2>Synthesis & Strategic Insights</h2>
+
+            <p>Combining all analytical frameworks reveals a comprehensive picture of EV fleet evolution. The market has transitioned from experimental niche to mainstream adoption, with clear phases identifiable through TSI stratification.</p>
+
+            <h3>Key Findings</h3>
+            <div class="insight-box">
+                <p><strong>Technology Shift:</strong> BEV penetration has accelerated dramatically post-2020, with phase space trajectories showing simultaneous market expansion and technology preference evolution. PHEVs served as a transitional technology but are losing share to pure electric platforms.</p>
+            </div>
+
+            <div class="insight-box">
+                <p><strong>Geographic Concentration:</strong> Despite growing absolute numbers, geographic diversity has not increased proportionally. A small number of counties continue to dominate registrations, suggesting infrastructure and policy remain significant barriers to geographic diffusion.</p>
+            </div>
+
+            <div class="insight-box">
+                <p><strong>Market Consolidation:</strong> Early diversity of manufacturers has given way to clear market leaders. Hierarchical clustering reveals two distinct camps: established automakers with gradual EV portfolios, and pure-play EV manufacturers with rapid scaling strategies.</p>
+            </div>
+
+            <div class="insight-box">
+                <p><strong>Acceleration Patterns:</strong> The geographic acceleration index identifies emerging markets distinct from current volume leaders. Some counties show explosive second-derivative growth, suggesting nascent adoption waves that will reshape regional rankings.</p>
+            </div>
+
+            <div class="insight-box">
+                <p><strong>Regulatory Influence:</strong> CAFV eligibility patterns correlate strongly with temporal adoption phases. Policy-driven incentives appear to have catalyzed initial adoption before market forces became self-sustaining in recent years.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Methodological Innovations</h2>
+
+            <p>This analysis introduces several novel approaches worth highlighting for their general applicability beyond EV fleet data.</p>
+
+            <h3>TemporalSpatialIndex Framework</h3>
+            <p>The composite scoring system synthesizing temporal, spatial, and market dimensions can be adapted to any dataset with analogous structure. Real estate markets could use property age, geographic location, and builder market share. Consumer electronics could incorporate release date, regional sales, and manufacturer dominance. The key insight is that meaningful patterns often exist in the interaction between these dimensions rather than in each independently.</p>
+
+            <h3>Velocity Delta as Leading Indicator</h3>
+            <p>First-derivative analysis is common, but second-derivative acceleration patterns are underutilized in business analytics. By measuring not just change but the rate of change in change, we identify inflection points and momentum shifts before they become obvious in aggregate metrics. This has applications in sales forecasting, user growth analysis, and supply chain management.</p>
+
+            <h3>Integrated Visualization Suite</h3>
+            <p>Rather than selecting a single "best" visualization method, this approach generates complementary views. Hierarchical clustering reveals nested relationships. PCA shows overall structure. Flow networks highlight connections. Scatter matrices expose multivariate patterns. Phase space trajectories reveal dynamics. The totality provides a more complete understanding than any single technique.</p>
+        </div>
+
+        <div class="section">
+            <h2>Technical Implementation Notes</h2>
+
+            <p>The analysis leverages Python's scientific computing stack with specific design choices for robustness and aesthetic quality.</p>
+
+            <h3>Library Selection</h3>
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <h4>Pandas</h4>
+                    <p>Data manipulation and aggregation. GroupBy operations enable efficient computation of county-year statistics, manufacturer portfolios, and temporal trends without explicit loops.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>NumPy</h4>
+                    <p>Numerical operations and array manipulation. Used for normalization, distance calculations, and matrix operations underlying PCA and clustering.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>Matplotlib</h4>
+                    <p>Low-level plotting control. Allows precise customization of colors, layouts, annotations, and composite visualizations impossible in higher-level libraries.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>Seaborn</h4>
+                    <p>Statistical visualization defaults. Provides sophisticated aesthetic themes and automatic computation of distributions for violin plots and heatmaps.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>Scikit-learn</h4>
+                    <p>Machine learning algorithms. StandardScaler for feature normalization, PCA for dimensionality reduction, KMeans for clustering. Well-tested implementations with consistent APIs.</p>
+                </div>
+                
+                <div class="technique-card">
+                    <h4>SciPy</h4>
+                    <p>Scientific computing utilities. Hierarchical clustering, distance metrics, and statistical functions. Bridges gap between NumPy arrays and advanced algorithms.</p>
+                </div>
+            </div>
+
+            <h3>Color Palette Philosophy</h3>
+            <p>The consistent color scheme serves multiple purposes beyond aesthetics. Dark backgrounds reduce eye strain during extended analysis. The teal-to-mint gradient provides perceptual uniformity across value ranges. Purple accents draw attention to key findings. Black edges and gray tones create visual hierarchy without introducing additional hues that would increase cognitive load.</p>
+
+            <div class="key-concept">
+                <strong>Perceptual Considerations:</strong> Colors were chosen for distinguishability under various viewing conditions. The palette maintains sufficient contrast for colorblind viewers while providing aesthetic coherence. Gradients follow perceptual uniformity principles where equal distances in color space correspond to equal perceived differences.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Future Directions</h2>
+
+            <p>This analysis establishes a foundation for several extensions and refinements.</p>
+
+            <h3>Enhanced Temporal Modeling</h3>
+            <p>The current trend extraction uses simple moving averages. More sophisticated approaches could employ exponential smoothing, ARIMA models, or structural time series decomposition to separate trend, seasonal, and irregular components with greater precision. This would enable forecasting of future adoption rates and identification of cyclical patterns linked to policy renewal cycles or product refresh schedules.</p>
+
+            <h3>Network Analysis Extensions</h3>
+            <p>The current correlation matrix treats manufacturer relationships independently. Graph theory methods could identify communities, central nodes, and bridge manufacturers that connect otherwise distinct clusters. Temporal network analysis could reveal how these relationships evolve, potentially predicting market disruptions or partnership opportunities.</p>
+
+            <h3>Spatial Econometrics</h3>
+            <p>Geographic patterns likely exhibit spatial autocorrelation where neighboring counties influence each other through infrastructure spillover, cultural diffusion, and policy contagion. Explicit spatial models could quantify these effects and identify which counties are leaders versus followers in adoption waves.</p>
+
+            <h3>Causal Inference</h3>
+            <p>Current analysis identifies correlations and patterns but does not establish causation. Quasi-experimental methods like difference-in-differences or synthetic controls could isolate the causal impact of specific policies, infrastructure investments, or product launches by comparing regions with and without interventions.</p>
+
+            <div class="insight-box">
+                <p><strong>Data Integration:</strong> Combining this registration data with charging infrastructure locations, electricity pricing, demographic characteristics, and dealership networks would enable multivariate modeling of adoption drivers. Machine learning could identify complex interaction effects invisible in univariate analysis.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Advanced Analytics Framework for Electric Vehicle Fleet Dynamics</p>
+        <p>Mathematical synthesis combining classical statistics, machine learning, and novel indexing methodologies</p>
+        <p>All visualizations generated at 300 DPI resolution with consistent color palette for professional presentation</p>
+    </footer>
+</body>
+</html>
