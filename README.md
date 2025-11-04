@@ -213,8 +213,9 @@ Electric-vehicle-population/
 
 The included HTML synthesis document explains mathematical foundations and analytical methodology in accessible language. Covers PCA, clustering algorithms, correlation networks, phase space dynamics, and statistical decomposition techniques.
 
-[View Educational Synthesis](ev_analysis_synthesis.html)
+[Electric Vehicle Fleet Analysis: Mathematical Framework](https://htmlpreview.github.io/?https://github.com/Cazzy-Aporbo/Electric-vehicle-population/blob/main/ev_analysis_synthesis.html)
 
+<sub>Advanced Analytics Synthesizing Classical Statistics with Dimensionality Reduction Techniques</sub>
 ## License
 
 MIT License - see dataset source for data-specific terms.
