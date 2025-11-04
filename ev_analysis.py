@@ -12,7 +12,7 @@ warnings.filterwarnings('ignore')
 
 COLORS = ['#172226', '#000000', '#5F5CA4', '#476F75', '#597C82', '#B2E4D9']
 GRADIENT = ['#172226', '#2A3A3E', '#3D5156', '#476F75', '#597C82', '#6B8A8F', '#8BA8A8', '#A9C3C1', '#B2E4D9']
-OUTPUT_PATH = '/Users/cazandraaporbo/Desktop/mygit/Electric_Vehicles/'
+OUTPUT_PATH = '/Electric_Vehicles/'
 
 plt.style.use('dark_background')
 sns.set_palette(COLORS)
